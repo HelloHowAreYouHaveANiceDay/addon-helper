@@ -17,4 +17,8 @@ export default class RevitService {
                 return exists
             }
     }
+
+    static install(version: string){
+        // return async (package: )
+    }
 }

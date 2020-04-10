@@ -1,18 +1,19 @@
 import FileService from '../FileService'
 import path from 'path'
-import { fstat } from 'fs'
 
 describe("file operations", () => {
     const testDir = process.cwd() + '/test_files/'
     const testDirectory = path.join(testDir,  '/test/')
     const testFile = path.join(testDir + 'file.txt')   
+    const copyTargetDir = path.join(testDirectory + '/temp/')
     const copyTarget = path.join(testDir + '/temp/' + 'file.txt')   
 
     // make sure testing directory is clear
     beforeAll(async () => {
         try {
             await FileService.removedir(testDirectory)
-            await FileService.removedir(copyTarget)
+            await FileService.removeFile(copyTarget)
+            await FileService.removedir(copyTargetDir)
         }catch(err) {
             
         }
@@ -38,7 +39,8 @@ describe("file operations", () => {
     afterAll(async () => {
         try {
             await FileService.removedir(testDirectory)
-            await FileService.removedir(copyTarget)
+            await FileService.removeFile(copyTarget)
+            await FileService.removedir(copyTargetDir)
         }catch(err) {
         }      
     })

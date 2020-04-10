@@ -1,0 +1,12 @@
+{
+    "packages": [
+        {
+            "directory": "test",
+            "target":
+              "Desktop"  ,
+            "files": [
+                "test.txt"
+            ]
+        }
+    ]
+}

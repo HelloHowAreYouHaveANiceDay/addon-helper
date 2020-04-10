@@ -48,6 +48,11 @@ export default class FileService {
     }
 
     static async removeFile (filePath: string) {
+        try {
+            await util.promisify(fs.unlink)(filePath)
+        } catch (error) {
+            throw error
+        }
     }
 
     static async exists(targetPath: string){
