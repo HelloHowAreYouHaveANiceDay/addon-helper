@@ -3,7 +3,7 @@
         {
             "directory": "test",
             "target":
-              "Desktop"  ,
+              "Desktop",
             "files": [
                 "test.txt"
             ]

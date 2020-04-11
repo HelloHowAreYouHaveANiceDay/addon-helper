@@ -31,6 +31,16 @@ export default class FileService {
         }
     }
 
+    static async readJson(filePath: string){
+        try {
+            const fileContents = await util.promisify(fs.readFile)(filePath, 'utf8');
+            console.log(fileContents)
+            return fileContents
+        } catch (error) {
+            throw error
+        }
+    }
+
     static async createdir(directoryPath: string) {
         try {
             await util.promisify(fs.mkdir)(directoryPath)

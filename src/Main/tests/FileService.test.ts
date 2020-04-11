@@ -46,3 +46,17 @@ describe("file operations", () => {
     })
 
 })
+
+    
+describe('manifest reading', () => {
+    const testManifest = process.cwd() + '/test_files/example_package/manifest.json'
+    
+    test('read manifest', async () => {
+        try {
+            const manifest = await FileService.readJson(testManifest);
+            expect(manifest).toBeDefined()
+        } catch (error) {
+            expect(error).toBeUndefined()
+        }
+    })
+})

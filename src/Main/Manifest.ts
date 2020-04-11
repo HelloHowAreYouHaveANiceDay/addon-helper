@@ -1,4 +1,5 @@
 export interface Package {
+    name: string,
     target: string,
     directory: string,
     files: [string]
