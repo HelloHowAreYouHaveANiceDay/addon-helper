@@ -7,9 +7,8 @@
 
 <script lang="ts">
 import { Component, Vue } from "vue-property-decorator";
-import { remote } from 'electron';
 import { Manifest } from './Main/Manifest'
-import FileService from './Main/FileService'
+const {remote, ipcRenderer} = require('electron')
 import path from 'path'
 //@ts-ignore
 import {Table} from 'buefy'
@@ -19,7 +18,7 @@ import {Table} from 'buefy'
   }
 })
 export default class App extends Vue {
-
+  
   async selectPackage(){
     const selectedPackage = remote.dialog.showOpenDialogSync({
       properties:['openDirectory']
@@ -30,9 +29,6 @@ export default class App extends Vue {
       console.log(selectedPackage)
     } else {
       const manifestPath = path.join(selectedPackage[0],'manifest.json')
-      console.log(manifestPath)
-      const manifest = await FileService.readJson(manifestPath)   
-      console.log(manifest)
     }
   }
 }

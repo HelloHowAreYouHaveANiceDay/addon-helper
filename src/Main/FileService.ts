@@ -1,10 +1,11 @@
-import fs from 'fs'
+const fs = require('fs');
 import path from 'path'
 import util from 'util'
 
 const copyFilePromise = util.promisify(fs.copyFile)
 
 export default class FileService {
+    
     static copy(inputPath: string){
         return async (outputPath: string) => {
             try {
@@ -32,9 +33,9 @@ export default class FileService {
     }
 
     static async readJson(filePath: string){
+        console.log(filePath)
         try {
             const fileContents = await util.promisify(fs.readFile)(filePath, 'utf8');
-            console.log(fileContents)
             return fileContents
         } catch (error) {
             throw error
