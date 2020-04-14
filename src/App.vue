@@ -1,6 +1,29 @@
 <template>
   <div id="app">
-    <button @click="selectPackage" class="button">select package</button>
+    <button @click="selectPackage" class="button">add package</button>
+    <b-tabs v-model="activeTab">
+      <b-tab-item v-for="(c,i) in container" :label="c.name" :key="i">
+        <b-table :data="c.packages" >
+          <template slot-scope="props">
+            <b-table-column field="name" label="name">
+              {{props.row.name}}
+            </b-table-column>
+            <b-table-column field="version" label="version">
+              {{props.row.version}}
+            </b-table-column>
+            <b-table-column field="target" label="target">
+              {{props.row.target}}
+            </b-table-column>
+            <b-table-column field="files" label="files">
+              {{props.row.files.length}}
+            </b-table-column>
+            <b-table-column label="install">
+              <a @click="install(i, props)" class="button">install</a>
+            </b-table-column>
+          </template>
+        </b-table>
+      </b-tab-item>
+    </b-tabs>
     <b-table></b-table>
   </div>
 </template>
@@ -18,18 +41,32 @@ import {Table} from 'buefy'
   }
 })
 export default class App extends Vue {
+  container: Manifest[] = []
+  activeTab: number = 0;
   
   async selectPackage(){
     const selectedPackage = remote.dialog.showOpenDialogSync({
       properties:['openDirectory']
     });
-    console.log(selectedPackage)
     if(selectedPackage == undefined){
       // no folder is selected
       console.log(selectedPackage)
     } else {
       const manifestPath = path.join(selectedPackage[0],'manifest.json')
+      const manifest = await ipcRenderer.invoke('read-package', manifestPath)
+      const p = {
+       localPath: selectedPackage[0]
+      }
+      this.container.push(Object.assign({}, manifest, p));
     }
+  }
+
+  async install(manifest: number,e:{index:number, row:object}){
+    const container = this.container[manifest]
+    const packagePath = path.join(container.localPath, e.row.directory)
+    const p = container.packages[e.index];
+    console.log(p)
+    console.log(packagePath)
   }
 }
 

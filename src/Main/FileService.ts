@@ -36,7 +36,7 @@ export default class FileService {
         console.log(filePath)
         try {
             const fileContents = await util.promisify(fs.readFile)(filePath, 'utf8');
-            return fileContents
+            return JSON.parse(fileContents);
         } catch (error) {
             throw error
         }

@@ -5,6 +5,7 @@ import {
   createProtocol,
   installVueDevtools
 } from "vue-cli-plugin-electron-builder/lib";
+import FileService from './Main/FileService';
 const isDevelopment = process.env.NODE_ENV !== "production";
 
 // TODO: Refactor into Class
@@ -89,6 +90,15 @@ class Main {
     app.on('ready', this.createWindow);
     app.on('window-all-closed', this.onWindowAllClosed);
     app.on('activate', this.onActivate)
+    this.mountHandlers()
+  }
+
+  private mountHandlers() {
+    ipcMain.handle('read-package', async (event, manifestPath) => {
+      const result = await FileService.readJson(manifestPath);
+      return result
+    })
+
   }
 
   private onWindowAllClosed() {
