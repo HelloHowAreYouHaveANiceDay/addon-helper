@@ -3,9 +3,12 @@
 import { app, protocol, BrowserWindow, ipcMain } from "electron";
 import {
   createProtocol,
-  installVueDevtools
 } from "vue-cli-plugin-electron-builder/lib";
 import FileService from './Main/FileService';
+import { Package } from './Main/Manifest';
+import path from 'path'
+import * as R from 'ramda'
+import RevitService from './Main/RevitService';
 const isDevelopment = process.env.NODE_ENV !== "production";
 
 // TODO: Refactor into Class
@@ -94,9 +97,25 @@ class Main {
   }
 
   private mountHandlers() {
+    // read container manifest and return data
     ipcMain.handle('read-package', async (event, manifestPath) => {
       const result = await FileService.readJson(manifestPath);
       return result
+    })
+
+    ipcMain.handle('install-package', async (event, p: Package) => {
+      //get target addon directory
+
+      // TODO: this is fragile, need better abstraction for software versions
+      const [software, version] = p.target.split(' ')
+      console.log(version)
+      if (software == 'RVT') {
+        const targetPath = RevitService.getAddonPath(version);
+        const sources = p.files.map((f) => path.join(p.directory, f))
+        const targets = p.files.map((f) => path.join(targetPath, f))
+        const copies = R.zip(sources, targets).map(async ([s, t]) => { return await FileService.copy(s)(t) });
+        return await Promise.all(copies);
+      }
     })
 
   }
@@ -142,7 +161,7 @@ class Main {
       win = null;
     });
   }
-  
+
 }
 
 // Exit cleanly on request from parent process in development mode.

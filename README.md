@@ -1,4 +1,4 @@
-# addon-deployer
+# AEC Package Manager
 
 ## Project setup
 ```

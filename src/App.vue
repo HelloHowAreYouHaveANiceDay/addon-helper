@@ -65,8 +65,10 @@ export default class App extends Vue {
     const container = this.container[manifest]
     const packagePath = path.join(container.localPath, e.row.directory)
     const p = container.packages[e.index];
-    console.log(p)
-    console.log(packagePath)
+    // update diretory with the full path
+    p.directory = packagePath
+    const install = await ipcRenderer.invoke('install-package', p)
+    console.log(install);
   }
 }
 

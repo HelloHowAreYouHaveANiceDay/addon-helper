@@ -19,6 +19,7 @@ export default class FileService {
                     await FileService.exists(directory)
                 } catch (error) {
                     // create directory
+                    console.log(error)
                     await FileService.createdir(directory)
                 }
 
